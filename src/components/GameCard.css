@@ -1,0 +1,138 @@
+.game-card {
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  flex-shrink: 0; /* Prevent shrinking in flex containers */
+  min-height: fit-content;
+}
+
+.game-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.game-status {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.special-record-alert {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.teams-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.team-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vs {
+  font-weight: bold;
+  color: var(--text-secondary);
+  padding: 0 1rem;
+}
+
+.team-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.team-logo-small {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.team-name-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.team-name {
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.2;
+}
+
+.team-name-en {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.streak-tag {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.streak-tag.hot {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: var(--win-color);
+}
+
+.streak-tag.cold {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: var(--loss-color);
+}
+
+.team-record {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.status-tags {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.tag {
+  font-size: 0.65rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.tag.rookie {
+  background-color: rgba(234, 179, 8, 0.2);
+  color: var(--rookie-color);
+}
+
+.tag.il {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: var(--il-color);
+}
+
+.team-score {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
