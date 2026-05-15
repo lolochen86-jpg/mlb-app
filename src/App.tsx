@@ -17,6 +17,8 @@ function App() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
 
   useEffect(() => {
+    // 除錯用彈窗，確認程式有執行
+    console.log('App Mounted');
     
     const loadSchedule = async () => {
       setLoading(true);
