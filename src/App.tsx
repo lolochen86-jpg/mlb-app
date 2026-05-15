@@ -17,8 +17,6 @@ function App() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
 
   useEffect(() => {
-    // 除錯用彈窗，確認程式有執行
-    console.log('App Mounted');
     
     const loadSchedule = async () => {
       setLoading(true);
@@ -111,15 +109,6 @@ function App() {
         )}
       </div>
 
-      <header className="main-header">
-        <h1>MLB 賽事預測引擎 (Prediction Engine)</h1>
-        <p className="subtitle">進階數據與分析 (Advanced Stats & Analysis)</p>
-      </header>
-
-      <ScheduleHeader 
-        selectedDate={selectedDate} 
-        onDateChange={setSelectedDate} 
-      />
 
       <main className="content-layout">
         <div className="games-list">
