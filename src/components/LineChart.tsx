@@ -80,18 +80,26 @@ export function LineChart({ lines, labels, title }: Props) {
           return (
             <g key={lineIndex}>
               {line.showLine !== false && (
-                <path d={pathD} fill="none" stroke={line.color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" opacity="0.8" />
+                <path 
+                  d={pathD} 
+                  fill="none" 
+                  stroke={line.color} 
+                  strokeWidth="2.5" 
+                  strokeLinejoin="round" 
+                  strokeLinecap="round" 
+                  opacity="0.85" 
+                />
               )}
               {validPoints.map((p, i) => (
                 <circle 
                   key={i} 
                   cx={p.x} 
                   cy={p.y} 
-                  r={line.showLine === false ? "4" : "2"} 
-                  fill={line.showLine === false ? "transparent" : line.color} 
+                  r={line.showLine === false ? "3.5" : "1.5"} 
+                  fill={line.showLine === false ? "rgba(255,255,255,0.15)" : line.color} 
                   stroke={line.color} 
-                  strokeWidth="2" 
-                  opacity={line.showLine === false ? "1" : "0.8"}
+                  strokeWidth={line.showLine === false ? "1.5" : "1"} 
+                  opacity={line.showLine === false ? "0.7" : "0.9"}
                 >
                   <title>{`${labels[p.i] || `Point ${p.i + 1}`}: ${p.val.toFixed(1)}`}</title>
                 </circle>

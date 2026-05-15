@@ -10,7 +10,7 @@ interface Props {
   onClose: () => void;
 }
 
-type ChartTab = '15games' | 'season' | 'monthly';
+type ChartTab = '15games' | '30days' | 'season';
 
 export function StatsDashboard({ game, onClose }: Props) {
   const [awayStats, setAwayStats] = useState<any>(null);
@@ -57,25 +57,33 @@ export function StatsDashboard({ game, onClose }: Props) {
         return (val === 15 || val === 10 || val === 5 || val === 1) ? val.toString() : '';
       });
       scoreLines = [
-        { data: stats.scoreHistory, color: 'rgba(255,255,255,0.4)', label: '當場得分', showLine: false },
+        { data: stats.scoreHistory, color: 'rgba(255,255,255,0.6)', label: '當場得分', showLine: false },
         { data: stats.scoreMA5, color: '#ef4444', label: '5MA' },
         { data: stats.scoreMA10, color: '#f97316', label: '10MA' },
         { data: stats.scoreMA15, color: '#eab308', label: '15MA' },
       ];
       raLines = [
-        { data: stats.raHistory, color: 'rgba(255,255,255,0.4)', label: '當場失分', showLine: false },
+        { data: stats.raHistory, color: 'rgba(255,255,255,0.6)', label: '當場失分', showLine: false },
         { data: stats.raMA5, color: '#3b82f6', label: '5MA' },
         { data: stats.raMA10, color: '#06b6d4', label: '10MA' },
         { data: stats.raMA15, color: '#10b981', label: '15MA' },
       ];
-    } else if (chartTab === 'season') {
-      labels = Array.from({length: stats.seasonScoreMA15.length}, (_, i) => i % 10 === 0 ? `G${i+1}` : '');
+    } else if (chartTab === '30days') {
+      const dates = stats.last30Dates || [];
+      labels = dates.map((d: string, i: number) => (i % 7 === 0 || i === dates.length - 1) ? d : '');
+      scoreLines = [
+        { data: stats.last30Scores, color: 'rgba(255,255,255,0.3)', label: '當場得分', showLine: false },
+        { data: stats.last30ScoreMA5, color: '#ef4444', label: '5MA' },
+      ];
+      raLines = [
+        { data: stats.last30Ras, color: 'rgba(255,255,255,0.3)', label: '當場失分', showLine: false },
+        { data: stats.last30RaMA5, color: '#3b82f6', label: '5MA' },
+      ];
+    } else {
+      const dataLength = stats.seasonScoreMA15.length;
+      labels = Array.from({length: dataLength}, (_, i) => i % 10 === 0 ? `G${i+1}` : '');
       scoreLines = [{ data: stats.seasonScoreMA15, color: '#ef4444', label: '得分 15MA' }];
       raLines = [{ data: stats.seasonRaMA15, color: '#3b82f6', label: '失分 15MA' }];
-    } else {
-      labels = ['4月', '5月', '6月', '7月', '8月', '9月'];
-      scoreLines = [{ data: stats.monthlyScoreMA, color: '#ef4444', label: '月均得分' }];
-      raLines = [{ data: stats.monthlyRaMA, color: '#3b82f6', label: '月均失分' }];
     }
 
     return (
@@ -124,12 +132,13 @@ export function StatsDashboard({ game, onClose }: Props) {
         <div className="stat-group-title">人員與傷兵 (Roster & Injuries)</div>
         {stats.injuries.length > 0 ? (
           <div className="injury-list">
-            {stats.injuries.map((inj: any, i: number) => (
-              <div key={i} className="injury-item">
+            {stats.injuries.slice(0, 4).map((inj: any, i: number) => (
+              <div key={i} className={`injury-item ${inj.isStarter ? 'critical' : ''}`}>
                 <span className="injury-name">{inj.name}</span>
                 <span className="injury-impact">{inj.impact}</span>
               </div>
             ))}
+            {stats.injuries.length > 4 && <div className="injury-more">...及其他 {stats.injuries.length - 4} 名球員</div>}
           </div>
         ) : (
           <div className="stat-row">
@@ -147,7 +156,7 @@ export function StatsDashboard({ game, onClose }: Props) {
         <h3>對戰數據分析 (Matchup Analysis)</h3>
         <div className="chart-tabs">
           <button className={chartTab === '15games' ? 'active' : ''} onClick={() => setChartTab('15games')}>近15場</button>
-          <button className={chartTab === 'monthly' ? 'active' : ''} onClick={() => setChartTab('monthly')}>月份走勢</button>
+          <button className={chartTab === '30days' ? 'active' : ''} onClick={() => setChartTab('30days')}>近30天</button>
           <button className={chartTab === 'season' ? 'active' : ''} onClick={() => setChartTab('season')}>整季走勢</button>
         </div>
         <button className="close-btn" onClick={onClose}>×</button>
@@ -162,16 +171,16 @@ export function StatsDashboard({ game, onClose }: Props) {
       <div className="prediction-engine">
         <h4>預測得分引擎 (Prediction Engine)</h4>
         <div className="prediction-content">
-          <p>⚠️ 僅限真實數據計算，若數據不足則停止分析</p>
+          <p className="formula-hint">公式: (隊伍近15場得分 × 1.05 + 對手近15場失分 × 0.95) / 2</p>
           <div className="score-prediction">
             <div className="predicted-score">
               {getChineseTeamName(game.teams.away.team.id, game.teams.away.team.name)}
-              <strong>{Math.round(parseFloat(awayStats.last15GamesAvg) * 1.05 + parseFloat(homeStats.last15RaAvg) * 0.95) / 2}</strong>
+              <strong>{(Math.round(parseFloat(awayStats.last15GamesAvg) * 1.05 + parseFloat(homeStats.last15RaAvg) * 0.95) / 2).toFixed(1)}</strong>
             </div>
             <span>-</span>
             <div className="predicted-score">
               {getChineseTeamName(game.teams.home.team.id, game.teams.home.team.name)}
-              <strong>{Math.round(parseFloat(homeStats.last15GamesAvg) * 1.05 + parseFloat(awayStats.last15RaAvg) * 0.95) / 2}</strong>
+              <strong>{(Math.round(parseFloat(homeStats.last15GamesAvg) * 1.05 + parseFloat(awayStats.last15RaAvg) * 0.95) / 2).toFixed(1)}</strong>
             </div>
           </div>
         </div>

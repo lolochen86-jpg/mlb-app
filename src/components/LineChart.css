@@ -1,43 +1,59 @@
 .line-chart-container {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 1rem;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 12px;
+  padding: 1.25rem;
   margin-top: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .chart-title {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
   text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.data-point text {
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.data-point:hover text {
-  opacity: 1;
+.chart-title::before {
+  content: '';
+  display: block;
+  width: 3px;
+  height: 12px;
+  background: var(--accent-color);
+  border-radius: 2px;
 }
 
 .chart-legend {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   font-size: 0.75rem;
   color: var(--text-secondary);
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.4rem;
+  cursor: default;
+  transition: color 0.2s;
+}
+
+.legend-item:hover {
+  color: var(--text-primary);
 }
 
 .legend-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
